@@ -1,14 +1,9 @@
 from calendar import month
 from datetime import date, datetime, timedelta
 
-B_D_list = {'Halyna':'17.10.1987',
-            'Alex':'26.02.1986',
-            'Nadiya':'09.09.1986',
-            'Slava':'16.10.1978',
-            'Alexey':'29.03.1976',
-            'Test1':'15.05.2022',
-            'Test2':'16.05.2022',
-            'Test3':'16.05.2022'}
+B_D_list = {'Test1':'19.05.2017',
+            'Test2':'19.05.2022',
+            'TestFinal':'25.05.2015'}
 days_name = {
     0: "Monday",
     1: "Tuesday",
@@ -18,19 +13,31 @@ days_name = {
     5: "Saturday",
     6: "Sunday",
 }
+testing = {key: value[:-5] for (key, value) in B_D_list.items()}
+print(testing)
+# initialization
+
 def get_birthdays_per_week(users):
   INTERVAL = timedelta(days=7)
   days_now_init = datetime.now()
   days_now = datetime.now() - timedelta(days_now_init.weekday()) # Week starts from 1 day
+# !!!! ПРОБЛЕМЫ   days_now некорректно считает дни
+# Дни рождения берутся почему-то с учетом года рождения. Почему так = хз
   finish_day = days_now + INTERVAL
   final = {}
   strings = []
-  worklist = {  
-    key: datetime.strptime(value, "%d.%m.%Y") for (key, value) in B_D_list.items()
-}
-  for k, values in worklist.items():
-    if values.month == finish_day.month:
-        if values.day >= days_now.day and values.day <= finish_day.day:
+  #worklist = {key: value[:-5] for (key, value) in B_D_list.items()}
+  #print(f'worklist!!!! {worklist}') 
+  #worklist = {
+  #  key: datetime.strptime(value, "%d.%m.%Y").replace(year=2022) for (key, value) in B_D_list.items()
+  #}
+# Швидше за все, коли створюється key: datetime.strptime(value, "%d.%m.%Y") треба позбутись року
+  #print(worklist) 
+
+
+  for k, values in B_D_list.items():
+    if datetime.strptime(values,"%d.%m.%Y").month == finish_day.month:
+        if datetime.strptime(values,"%d.%m.%Y").day >= days_now.day and datetime.strptime(values,"%d.%m.%Y").day <= finish_day.day:
             values = days_name.get(values.weekday())
             if values in ["Saturday", "Sunday"]:
                 values = "Monday"
@@ -44,10 +51,16 @@ def get_birthdays_per_week(users):
   result = result.replace('[','').replace(']','').replace('\'','')
   return print(result)
 
-if __name__ == __main__:
-
-  get_birthdays_per_week (B_D_list)
+get_birthdays_per_week (B_D_list)
 
 
 
 
+#B_D_list = {'Halyna':'17.10.1987',
+  #          'Alex':'26.02.1986',
+  #          'Nadiya':'09.09.1986',
+  #          'Slava':'16.10.1978',
+  #          'Alexey':'29.03.1976',
+  #          'Test1':'15.05.2022',
+  #          'Test2':'16.05.2022',
+  #          'TestFinal':'19.05.2015'}
